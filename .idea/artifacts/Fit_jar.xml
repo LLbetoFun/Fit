@@ -1,0 +1,10 @@
+<component name="ArtifactManager">
+  <artifact type="jar" build-on-make="true" name="Fit:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/Fit_jar</output-path>
+    <root id="archive" name="Fit.jar">
+      <element id="module-output" name="Fit" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/ow2/asm/asm-tree/9.7.1/asm-tree-9.7.1.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/ow2/asm/asm/9.7.1/asm-9.7.1.jar" path-in-jar="/" />
+    </root>
+  </artifact>
+</component>

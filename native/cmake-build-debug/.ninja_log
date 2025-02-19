@@ -1,0 +1,11 @@
+# ninja log v6
+815	933	7616699220289624	D:/LLbetoFun/Fit/native/build/libnative.dll.a	fe6540425e9b2357
+112	221	7615030622277699	libnative.dll	d2f084355e24aa68
+19	1005	7615025835266768	CMakeFiles/native.dir/src/hooker/hook.c.obj	5f0e4f623b13f5d7
+2	301	7615555143617211	build.ninja	74f41c22118271dc
+4	815	7616699211082946	CMakeFiles/native.dir/src/main/library.c.obj	438e4c06d1ce3161
+112	221	7615030622277699	libnative.dll.a	d2f084355e24aa68
+815	933	7616699220289624	D:/LLbetoFun/Fit/native/build/libnative.dll	fe6540425e9b2357
+6	836	7616699589230684	CMakeFiles/native.dir/src/main/library.c.obj	438e4c06d1ce3161
+836	948	7616699598572878	D:/LLbetoFun/Fit/native/build/libnative.dll	fe6540425e9b2357
+836	948	7616699598572878	D:/LLbetoFun/Fit/native/build/libnative.dll.a	fe6540425e9b2357

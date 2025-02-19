@@ -1,0 +1,10 @@
+<component name="libraryTable">
+  <library name="bin">
+    <CLASSES />
+    <JAVADOC />
+    <NATIVE>
+      <root url="file://$PROJECT_DIR$/jfx/bin" />
+    </NATIVE>
+    <SOURCES />
+  </library>
+</component>

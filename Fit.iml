@@ -7,5 +7,27 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar://$MODULE_DIR$/ObfuscutedJar.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="library" name="ow2.asm" level="project" />
+    <orderEntry type="library" name="ow2.asm.tree" level="project" />
+    <orderEntry type="library" name="SnakeGame" level="project" />
+    <orderEntry type="library" name="deobfuscator" level="project" />
+    <orderEntry type="library" name="bin" level="project" />
+    <orderEntry type="library" name="javafx-swt" level="project" />
+    <orderEntry type="library" name="javafx.base" level="project" />
+    <orderEntry type="library" name="javafx.controls" level="project" />
+    <orderEntry type="library" name="javafx.fxml" level="project" />
+    <orderEntry type="library" name="javafx.graphics" level="project" />
+    <orderEntry type="library" name="javafx.media" level="project" />
+    <orderEntry type="library" name="javafx.swing" level="project" />
+    <orderEntry type="library" name="javafx.web" level="project" />
   </component>
 </module>
