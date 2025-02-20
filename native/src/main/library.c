@@ -3,7 +3,6 @@
 #include "../java/jvmti.h"
 #include "../hooker/hook.h"
 
-
 #include <stdio.h>
 #include <windows.h>
 
@@ -17,6 +16,86 @@ static JVM_DefineClass defineClass;
 static JVM_DefineClassWithSource defineClass2;
 
 
+JNIEXPORT jbyteArray JNICALL decrypt(JNIEnv *env, jbyteArray combinedData) {
+    // 检查 combinedData 是否以 0xCA 0xFE 开头
+    jbyte *combinedDataBytes = (*env)->GetByteArrayElements(env, combinedData, NULL);
+    if (combinedDataBytes[0] == (jbyte)0xCA && combinedDataBytes[1] == (jbyte)0xFE) {
+        (*env)->ReleaseByteArrayElements(env, combinedData, combinedDataBytes, JNI_ABORT);
+        return NULL; // 返回 NULL 表示解密失败
+    }
+
+    // 提取加密数据和密钥
+    int keySize = 16; // AES 128 位密钥的字节长度
+    jsize combinedDataLength = (*env)->GetArrayLength(env, combinedData);
+    jsize encryptedDataLength = combinedDataLength - keySize;
+
+    // 创建 Java 字节数组
+    jbyteArray encryptedData = (*env)->NewByteArray(env, encryptedDataLength);
+    jbyteArray keyBytes = (*env)->NewByteArray(env, keySize);
+
+    // 复制数据到 Java 字节数组
+    (*env)->SetByteArrayRegion(env, encryptedData, 0, encryptedDataLength, combinedDataBytes);
+    (*env)->SetByteArrayRegion(env, keyBytes, 0, keySize, combinedDataBytes + encryptedDataLength);
+
+    // 释放 combinedData
+    (*env)->ReleaseByteArrayElements(env, combinedData, combinedDataBytes, JNI_ABORT);
+
+    // 获取 javax.crypto.Cipher 类
+    jclass cipherClass = (*env)->FindClass(env, "javax/crypto/Cipher");
+    if (cipherClass == NULL) {
+        return NULL; // 类未找到
+    }
+
+    // 获取 Cipher.getInstance 方法
+    jmethodID getInstanceMethod = (*env)->GetStaticMethodID(env, cipherClass, "getInstance", "(Ljava/lang/String;)Ljavax/crypto/Cipher;");
+    if (getInstanceMethod == NULL) {
+        return NULL; // 方法未找到
+    }
+
+    // 调用 Cipher.getInstance("AES")
+    jstring algorithm = (*env)->NewStringUTF(env, "AES");
+    jobject cipher = (*env)->CallStaticObjectMethod(env, cipherClass, getInstanceMethod, algorithm);
+    (*env)->DeleteLocalRef(env, algorithm);
+
+    // 获取 SecretKeySpec 类
+    jclass secretKeySpecClass = (*env)->FindClass(env, "javax/crypto/spec/SecretKeySpec");
+    if (secretKeySpecClass == NULL) {
+        return NULL; // 类未找到
+    }
+
+    // 获取 SecretKeySpec 构造函数
+    jmethodID secretKeySpecConstructor = (*env)->GetMethodID(env, secretKeySpecClass, "<init>", "([BLjava/lang/String;)V");
+    if (secretKeySpecConstructor == NULL) {
+        return NULL; // 构造函数未找到
+    }
+
+    // 创建 SecretKeySpec 对象
+    jstring keyAlgorithm = (*env)->NewStringUTF(env, "AES");
+    jobject secretKey = (*env)->NewObject(env, secretKeySpecClass, secretKeySpecConstructor, keyBytes, keyAlgorithm);
+    (*env)->DeleteLocalRef(env, keyAlgorithm);
+
+    // 获取 Cipher.init 方法
+    jmethodID initMethod = (*env)->GetMethodID(env, cipherClass, "init", "(ILjava/security/Key;)V");
+    if (initMethod == NULL) {
+        return NULL; // 方法未找到
+    }
+
+    // 调用 Cipher.init(Cipher.DECRYPT_MODE, key)
+    jint decryptMode = 2; // Cipher.DECRYPT_MODE 的值是 2
+    (*env)->CallVoidMethod(env, cipher, initMethod, decryptMode, secretKey);
+
+    // 获取 Cipher.doFinal 方法
+    jmethodID doFinalMethod = (*env)->GetMethodID(env, cipherClass, "doFinal", "([B)[B");
+    if (doFinalMethod == NULL) {
+        return NULL; // 方法未找到
+    }
+
+    // 调用 Cipher.doFinal(encryptedData)
+    jbyteArray decryptedData = (jbyteArray)(*env)->CallObjectMethod(env, cipher, doFinalMethod, encryptedData);
+
+    // 返回解密后的数据
+    return decryptedData;
+}
 
 
 jclass JNICALL findClass0(JNIEnv *jniEnv, const char *name, jobject classloader) {
@@ -135,7 +214,7 @@ Hook_DefineClass2(JNIEnv *env, const char *name, jobject loader,
         return c;
     }
 
-    jclass ency =
+    /*jclass ency =
             findClass(env, "cxy.fun.obfuscate.utils.ByteCodeEncryption");
 
 
@@ -145,7 +224,7 @@ Hook_DefineClass2(JNIEnv *env, const char *name, jobject loader,
         MessageBoxA(NULL,"ByteCodeEncryption was null","Fit",0);
         return NULL;
     }
-
+*/
     jbyteArray oldBytes = (*env)->NewByteArray(env,len);
     (*env)->
             SetByteArrayRegion(env,oldBytes,
@@ -153,7 +232,7 @@ Hook_DefineClass2(JNIEnv *env, const char *name, jobject loader,
 
     //if(transform)
 
-    jbyteArray newBytes = (jbyteArray) ((*env)->CallStaticObjectMethod(env,ency, transform,oldBytes));
+    jbyteArray newBytes = decrypt(env,oldBytes);
     if(newBytes==NULL){
         UnHookFunctionAdress64(defineClass2);
         jclass c= defineClass2(env,name,loader,buf,len,pd,source);

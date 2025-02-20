@@ -34,7 +34,7 @@ public class FitLoader {
     }
     public static void load() throws Exception {
         loadLibraryFromJar("fit.dll");
-        Class.forName(ByteCodeEncryption.class.getName());
+        //Class.forName(ByteCodeEncryption.class.getName());
 
         init();
     }

@@ -29,6 +29,9 @@ public class Includer {
     public static void registryIncludeClass(Class clzz) throws IOException {
         includeClasses.add(Utils.getClassBytes(clzz.getName()));
     }
+    public static void registryIncludeClass(Class clzz,boolean encrypt) throws Exception {
+        includeClasses.add(encrypt?ByteCodeEncryption.encrypt(Utils.getClassBytes(clzz.getName())):Utils.getClassBytes(clzz.getName()));
+    }
     public static void registryPathFile(String path,String destPath) throws IOException {
         includeFiles.put(destPath,Utils.getPathFileBytes(path));
     }
@@ -37,9 +40,9 @@ public class Includer {
             registryPathFile("./native/build/libnative.dll","native/fit.dll");
             registryIncludeClass(SimpleStringEncryption.class);
             registryIncludeClass(NumberEncryption.class);
-            registryIncludeClass(ByteCodeEncryption.class);
+            //registryIncludeClass(ByteCodeEncryption.class);
             registryIncludeClass(FitLoader.class);
-        } catch (IOException e) {
+        } catch (Exception e) {
             throw new RuntimeException(e);
         }
     }
