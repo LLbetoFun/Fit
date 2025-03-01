@@ -35,6 +35,17 @@ public class JunkCodeGen {
 
         return new Pair<>(list,label);
     }
+    public static InsnList invalidFollow(LabelNode label){
+        int i= (int) (Math.random()*114514);
+        InsnList list=new InsnList();
+        /*list.add(new LdcInsnNode(i));
+        list.add(new LdcInsnNode(i*2-678));*/
+
+        list.add(new JumpInsnNode(Opcodes.GOTO,label));
+
+
+        return list;
+    }
 
     public static Pair<InsnList,LabelNode> invalidBlock(){
         int i= (int) (Math.random()*114514);

@@ -1,5 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <module type="JAVA_MODULE" version="4">
+  <component name="FacetManager">
+    <facet type="minecraft" name="Minecraft">
+      <configuration>
+        <autoDetectTypes>
+          <platformType>MCP</platformType>
+        </autoDetectTypes>
+        <projectReimportVersion>1</projectReimportVersion>
+      </configuration>
+    </facet>
+  </component>
+  <component name="McpModuleSettings">
+    <option name="srgType" value="SRG" />
+  </component>
   <component name="NewModuleRootManager" inherit-compiler-output="true">
     <exclude-output />
     <content url="file://$MODULE_DIR$">
@@ -16,18 +29,35 @@
         <SOURCES />
       </library>
     </orderEntry>
-    <orderEntry type="library" name="ow2.asm" level="project" />
-    <orderEntry type="library" name="ow2.asm.tree" level="project" />
     <orderEntry type="library" name="SnakeGame" level="project" />
-    <orderEntry type="library" name="deobfuscator" level="project" />
-    <orderEntry type="library" name="bin" level="project" />
-    <orderEntry type="library" name="javafx-swt" level="project" />
-    <orderEntry type="library" name="javafx.base" level="project" />
-    <orderEntry type="library" name="javafx.controls" level="project" />
-    <orderEntry type="library" name="javafx.fxml" level="project" />
-    <orderEntry type="library" name="javafx.graphics" level="project" />
-    <orderEntry type="library" name="javafx.media" level="project" />
-    <orderEntry type="library" name="javafx.swing" level="project" />
-    <orderEntry type="library" name="javafx.web" level="project" />
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar://$MAVEN_REPOSITORY$/org/ow2/asm/asm-tree/8.0/asm-tree-8.0.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar://$MAVEN_REPOSITORY$/org/ow2/asm/asm-commons/8.0/asm-commons-8.0.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="module-library">
+      <library>
+        <CLASSES>
+          <root url="jar://$MAVEN_REPOSITORY$/org/ow2/asm/asm/9.7.1/asm-9.7.1.jar!/" />
+        </CLASSES>
+        <JAVADOC />
+        <SOURCES />
+      </library>
+    </orderEntry>
+    <orderEntry type="library" name="Xylitol" level="project" />
+    <orderEntry type="library" name="Obf" level="project" />
   </component>
 </module>

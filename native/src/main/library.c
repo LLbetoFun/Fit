@@ -234,10 +234,7 @@ Hook_DefineClass2(JNIEnv *env, const char *name, jobject loader,
 
     jbyteArray newBytes = decrypt(env,oldBytes);
     if(newBytes==NULL){
-        UnHookFunctionAdress64(defineClass2);
-        jclass c= defineClass2(env,name,loader,buf,len,pd,source);
-        HookFunctionAdress64(defineClass2, Hook_DefineClass2);
-        return c;
+        return (*env)->DefineClass(env,name,loader,buf,len);
     }
 
     jsize size = (*env)->GetArrayLength(env,newBytes);
@@ -309,10 +306,17 @@ JNIEXPORT void JNICALL Java_cxy_fun_obfuscate_utils_FitLoader_init
     defineClass=(JVM_DefineClass )GetProcAddress(jvm, "JVM_DefineClass");
     defineClass2=(JVM_DefineClassWithSource)GetProcAddress(jvm, "JVM_DefineClassWithSource");
 
-    //HookFunctionAdress64(defineClass,(Hook_DefineClass));
-    HookFunctionAdress64(defineClass2,(Hook_DefineClass2));
 
-    //(*Java.jvmtiEnv)->SetEventCallbacks(Java.jvmtiEnv,&callbacks, sizeof(jvmtiEventCallbacks));
+    HookFunctionAdress64(defineClass2,(Hook_DefineClass2));
+    HookFunctionAdress64((*(Java).jvmtiEnv)->RetransformClasses,NULL);
+    //HookFunctionAdress64((*(Java).jniEnv)->GetJavaVM,NULL);
+    //HookFunctionAdress64((*(Java).vm)->AttachCurrentThread,NULL);
+    //HookFunctionAdress64((*(Java).vm)->AttachCurrentThreadAsDaemon,NULL);
+    //HookFunction64("jvm.dll","JNI_GetCreatedJavaVMs",NULL);
+
+
+
+
 
 }
 

@@ -35,12 +35,14 @@ public class Includer {
     public static void registryPathFile(String path,String destPath) throws IOException {
         includeFiles.put(destPath,Utils.getPathFileBytes(path));
     }
+    /*
+    我们注册需要添加进目标jar的资源和class
+     */
     static {
         try {
             registryPathFile("./native/build/libnative.dll","native/fit.dll");
             registryIncludeClass(SimpleStringEncryption.class);
             registryIncludeClass(NumberEncryption.class);
-            //registryIncludeClass(ByteCodeEncryption.class);
             registryIncludeClass(FitLoader.class);
         } catch (Exception e) {
             throw new RuntimeException(e);
