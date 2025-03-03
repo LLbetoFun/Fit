@@ -5,6 +5,7 @@ import cxy.fun.obfuscate.asm.Utils;
 import cxy.fun.obfuscate.rename.RenameMapper;
 import org.objectweb.asm.ClassReader;
 import org.objectweb.asm.ClassWriter;
+import org.objectweb.asm.commons.AnalyzerAdapter;
 import org.objectweb.asm.commons.ClassRemapper;
 import org.objectweb.asm.tree.AbstractInsnNode;
 import org.objectweb.asm.tree.ClassNode;
@@ -20,6 +21,9 @@ public class ClassTraverser {
             if(!Utils.matchRegexes(ConfigParser.Instance.getKeepClasses(),cn.name))traverserClassMembers(cn);
             cn.sourceDebug=null;
             cn.sourceFile=null;
+
+
+
 
             ClassWriter cw = new ClassWriter(ClassWriter.COMPUTE_FRAMES|ClassWriter.COMPUTE_MAXS);
             ClassRemapper mapper = new ClassRemapper(cw,new RenameMapper());

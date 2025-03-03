@@ -1,0 +1,9 @@
+
+-class .*
+
+#-noverify
+
+
+
+-bytecodeencrypt true
+-flow true

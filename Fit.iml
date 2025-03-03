@@ -48,6 +48,7 @@
         <SOURCES />
       </library>
     </orderEntry>
+    <orderEntry type="library" name="Obf" level="project" />
     <orderEntry type="module-library">
       <library>
         <CLASSES>
@@ -57,7 +58,5 @@
         <SOURCES />
       </library>
     </orderEntry>
-    <orderEntry type="library" name="Xylitol" level="project" />
-    <orderEntry type="library" name="Obf" level="project" />
   </component>
 </module>
