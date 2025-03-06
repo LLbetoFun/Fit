@@ -14,6 +14,7 @@ public class ConfigParser {
     private final List<String> keepFields=new ArrayList<String>();
     private boolean enableBytesEncrypt=true;
     private boolean enableFlow=true;
+    private int safeLocalRange=5;
 
     private String newPackage="";
     public ConfigParser(String fileName) throws IOException {
@@ -42,6 +43,9 @@ public class ConfigParser {
                 if (line.startsWith("-newpackage")) {
                     newPackage= line.split(" ")[1];
                 }
+                if(line.toLowerCase().startsWith("-safelocalrange")){
+                    safeLocalRange= Integer.parseInt(line.split(" ")[1]);
+                }
             }
         }
     }
@@ -52,6 +56,9 @@ public class ConfigParser {
     }
     public String getNewPackage() {
         return (newPackage.isEmpty()||newPackage.endsWith("/")?newPackage:newPackage+"/");
+    }
+    public int getSafeLocalRange(){
+        return safeLocalRange;
     }
     public List<String> getClasses() {
         return classes;
