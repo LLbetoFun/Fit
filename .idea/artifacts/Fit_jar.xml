@@ -5,6 +5,7 @@
       <element id="module-output" name="Fit" />
       <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/ow2/asm/asm-tree/9.7.1/asm-tree-9.7.1.jar" path-in-jar="/" />
       <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/ow2/asm/asm/9.7.1/asm-9.7.1.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$MAVEN_REPOSITORY$/org/ow2/asm/asm-commons/9.7/asm-commons-9.7.jar" path-in-jar="/" />
     </root>
   </artifact>
 </component>

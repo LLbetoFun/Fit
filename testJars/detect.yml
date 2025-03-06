@@ -1,0 +1,8 @@
+input: lora.jar
+output: output.jar
+transformers:
+  - normalizer.MethodNormalizer:
+      mapping-file: normalizer.txt
+        - stringer.StringEncryptionTransformer
+        - normalizer.ClassNormalizer: { }
+          normalizer.FieldNormalizer: { }

@@ -2,8 +2,7 @@
 -class .*
 
 #-noverify
+-safelocalrange 5
 
-
-
--bytecodeencrypt true
+-bytecodeencrypt false
 -flow true

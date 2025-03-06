@@ -2,10 +2,7 @@ package cxy.fun.obfuscate;
 
 import cxy.fun.obfuscate.transfomer.AbsTransformer;
 import cxy.fun.obfuscate.transfomer.impl.clzz.LoaderInclude;
-import cxy.fun.obfuscate.transfomer.impl.flow.BasicBlockFlow;
-import cxy.fun.obfuscate.transfomer.impl.flow.BlurJumpFlow;
-import cxy.fun.obfuscate.transfomer.impl.flow.FrameComputer;
-import cxy.fun.obfuscate.transfomer.impl.flow.JunkCodeTransformer;
+import cxy.fun.obfuscate.transfomer.impl.flow.*;
 import cxy.fun.obfuscate.transfomer.impl.ldc.BooleanBlur;
 import cxy.fun.obfuscate.transfomer.impl.ldc.IntObfuscate;
 import cxy.fun.obfuscate.transfomer.impl.ldc.NumberEncyTransformer;
@@ -44,18 +41,14 @@ public class Transformer {
 
     }
     static {
-
-        registerTransformer(new StringEncyTransformer());
         registerTransformer(new LoaderInclude());
-
+        registerTransformer(new FlattenFlow());
+        registerTransformer(new StringEncyTransformer());
         registerTransformer(new BlurJumpFlow());
         registerTransformer(new BooleanBlur());
-
         registerTransformer(new NumberEncyTransformer());
-
-        registerTransformer(new BasicBlockFlow());
         registerTransformer(new IntObfuscate());
-
+        //registerTransformer(new ExceptionFlow());
 
 
 

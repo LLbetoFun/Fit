@@ -1,0 +1,25 @@
+<component name="libraryTable">
+  <library name="Xylitol">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/testJars/Xylitol.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES>
+      <root url="jar://$PROJECT_DIR$/testJars/Xylitol.jar!/jdk11/src/java.base/share/classes" />
+      <root url="jar://$PROJECT_DIR$/testJars/Xylitol.jar!/jdk11/src/java.datatransfer/share/classes" />
+      <root url="jar://$PROJECT_DIR$/testJars/Xylitol.jar!/jdk11/src/java.desktop/share/classes" />
+      <root url="jar://$PROJECT_DIR$/testJars/Xylitol.jar!/jdk11/src/java.instrument/share/classes" />
+      <root url="jar://$PROJECT_DIR$/testJars/Xylitol.jar!/jdk11/src/java.logging/share/classes" />
+      <root url="jar://$PROJECT_DIR$/testJars/Xylitol.jar!/jdk11/src/java.management/share/classes" />
+      <root url="jar://$PROJECT_DIR$/testJars/Xylitol.jar!/jdk11/src/java.naming/share/classes" />
+      <root url="jar://$PROJECT_DIR$/testJars/Xylitol.jar!/jdk11/src/java.prefs/share/classes" />
+      <root url="jar://$PROJECT_DIR$/testJars/Xylitol.jar!/jdk11/src/java.rmi/share/classes" />
+      <root url="jar://$PROJECT_DIR$/testJars/Xylitol.jar!/jdk11/src/java.scripting/share/classes" />
+      <root url="jar://$PROJECT_DIR$/testJars/Xylitol.jar!/jdk11/src/java.security.sasl/share/classes" />
+      <root url="jar://$PROJECT_DIR$/testJars/Xylitol.jar!/jdk11/src/java.sql/share/classes" />
+      <root url="jar://$PROJECT_DIR$/testJars/Xylitol.jar!/jdk11/src/java.xml.crypto/share/classes" />
+      <root url="jar://$PROJECT_DIR$/testJars/Xylitol.jar!/jdk11/src/java.xml/share/classes" />
+      <root url="jar://$PROJECT_DIR$/testJars/Xylitol.jar!/jdk11/src/jdk.javadoc/share/classes" />
+    </SOURCES>
+  </library>
+</component>

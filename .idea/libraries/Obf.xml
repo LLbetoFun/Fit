@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="Obf">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/Obf.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

@@ -1,0 +1,13 @@
+<component name="ArtifactManager">
+  <artifact build-on-make="true" name="Fit">
+    <output-path>$PROJECT_DIR$/out/artifacts/Fit</output-path>
+    <root id="root">
+      <element id="artifact" artifact-name="Fit:jar" />
+      <element id="directory" name="native">
+        <element id="directory" name="build">
+          <element id="file-copy" path="$PROJECT_DIR$/native/build/libnative.dll" />
+        </element>
+      </element>
+    </root>
+  </artifact>
+</component>

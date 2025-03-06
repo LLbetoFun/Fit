@@ -2,7 +2,6 @@ package cxy.fun.obfuscate.transfomer.impl.flow;
 
 import cxy.fun.config.ConfigParser;
 import cxy.fun.obfuscate.asm.BlockUtils;
-import cxy.fun.obfuscate.asm.Utils;
 import cxy.fun.obfuscate.rename.Mappings;
 import cxy.fun.obfuscate.transfomer.AbsTransformer;
 import org.objectweb.asm.Opcodes;
@@ -10,19 +9,21 @@ import org.objectweb.asm.Type;
 import org.objectweb.asm.commons.AnalyzerAdapter;
 import org.objectweb.asm.tree.*;
 
-import java.io.ObjectInputFilter;
 import java.util.*;
 
+import static cxy.fun.obfuscate.asm.BlockUtils.analyzeLocalVarRanges;
+import static cxy.fun.obfuscate.asm.BlockUtils.isLocalSafeInsnNode;
 
-public class BasicBlockFlow extends AbsTransformer<MethodNode> {
-    public BasicBlockFlow() {
+
+public class FlattenFlow extends AbsTransformer<MethodNode> {
+    public FlattenFlow() {
         super(MethodNode.class);
     }
     //private static final String STATE_VARIABLE_NAME = "state";
 
     private static void flattenControlFlow(MethodNode methodNode) {
 
-        if(methodNode.localVariables==null|| !methodNode.desc.endsWith("V")|| !ConfigParser.Instance.isEnableFlow())return;
+        if(methodNode.localVariables==null|| !methodNode.desc.endsWith("V")|| !ConfigParser.Instance.isEnableFlow()||methodNode.name.equals("<init>"))return;
 
         // 1. 分析控制流，获取基本块
         Map<LabelNode, Integer> blockToState = new HashMap<>();
@@ -37,14 +38,19 @@ public class BasicBlockFlow extends AbsTransformer<MethodNode> {
                 methodNode.desc,
                 null
         );
+        Map<Integer, BlockUtils.LocalVarRange> varRangeMap=analyzeLocalVarRanges(methodNode);
+        int index=0;
         for (AbstractInsnNode instruction : methodNode.instructions){
+
             instruction.accept(analyzer);
-            if(instruction instanceof JumpInsnNode){
+            if(instruction instanceof JumpInsnNode){//&&!(instruction.getOpcode()==Opcodes.GOTO)
                 blackList.add(((JumpInsnNode) instruction).label);
             }
-            if(instruction instanceof LabelNode&&(!(analyzer.locals==null||analyzer.locals.isEmpty())||!(analyzer.stack==null||analyzer.stack.isEmpty()))){
+            if(instruction instanceof LabelNode&&!isLocalSafeInsnNode(varRangeMap,instruction,index)){//||!(analyzer.stack==null||analyzer.stack.isEmpty())
                 blackList.add((LabelNode) instruction);
             }
+            index++;
+
         }//添加分块排除
         LabelNode methodStart = new LabelNode();
         int state = 0;

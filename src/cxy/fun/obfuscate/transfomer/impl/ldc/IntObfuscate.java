@@ -32,7 +32,7 @@ public class IntObfuscate extends AbsTransformer<MethodNode> {
 
                     // 插入复杂的混淆逻辑
                     instructions.insertBefore(ldcInsn, obfuscateInt(v2, random,startLocal));
-                    startLocal+=2;
+                    //startLocal+=2;
                     instructions.remove(ldcInsn);
                 }
             }
