@@ -10,6 +10,7 @@ import org.objectweb.asm.tree.MethodNode;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Random;
 
 import static cxy.fun.obfuscate.asm.Utils.isMainClass;
@@ -66,13 +67,17 @@ public class Mappings {
         classMap.put(clzz.replace('.','/'),klz.getName().replace('.','/'));
     }
     public static String generateRandomString(int length) {
-        String characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
+        char[] characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz".toCharArray();
+        List<String> dictionary=ConfigParser.Instance.getDictionary();
+        for(char c:characters){
+            if(dictionary.size()< 26) dictionary.add(0,String.valueOf(c));
+        }
         Random random = new Random();
         StringBuilder sb = new StringBuilder(length);
 
         for (int i = 0; i < length; i++) {
-            int index = random.nextInt(characters.length());
-            sb.append(characters.charAt(index));
+            int index = random.nextInt(dictionary.size());
+            sb.append(dictionary.get(index));
         }
 
         return sb.toString();

@@ -12,6 +12,7 @@ public class ConfigParser {
     private final List<String> keepClasses=new ArrayList<String>();
     private final List<String> keepMethods=new ArrayList<String>();
     private final List<String> keepFields=new ArrayList<String>();
+    private final List<String> dictionary=new ArrayList<>();
     private boolean enableBytesEncrypt=true;
     private boolean enableFlow=true;
     private int safeLocalRange=5;
@@ -46,6 +47,14 @@ public class ConfigParser {
                 if(line.toLowerCase().startsWith("-safelocalrange")){
                     safeLocalRange= Integer.parseInt(line.split(" ")[1]);
                 }
+                if(line.startsWith("-dictionary")){
+                    String[] split = line.split(" ");
+                    for (int i = 0, splitLength = split.length; i < splitLength; i++) {
+                        String s = split[i];
+                        if(i<1)continue;
+                        dictionary.add(s);
+                    }
+                }
             }
         }
     }
@@ -59,6 +68,9 @@ public class ConfigParser {
     }
     public int getSafeLocalRange(){
         return safeLocalRange;
+    }
+    public List<String> getDictionary(){
+        return dictionary;
     }
     public List<String> getClasses() {
         return classes;
