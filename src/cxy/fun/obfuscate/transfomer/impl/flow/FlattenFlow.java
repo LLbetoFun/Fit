@@ -2,6 +2,7 @@ package cxy.fun.obfuscate.transfomer.impl.flow;
 
 import cxy.fun.config.ConfigParser;
 import cxy.fun.obfuscate.asm.BlockUtils;
+import cxy.fun.obfuscate.asm.Utils;
 import cxy.fun.obfuscate.rename.Mappings;
 import cxy.fun.obfuscate.transfomer.AbsTransformer;
 import org.objectweb.asm.Opcodes;
@@ -15,9 +16,9 @@ import static cxy.fun.obfuscate.asm.BlockUtils.analyzeLocalVarRanges;
 import static cxy.fun.obfuscate.asm.BlockUtils.isLocalSafeInsnNode;
 
 
-public class FlattenFlow extends AbsTransformer<MethodNode> {
+public class FlattenFlow extends AbsTransformer<ClassNode> {
     public FlattenFlow() {
-        super(MethodNode.class);
+        super(ClassNode.class);
     }
     //private static final String STATE_VARIABLE_NAME = "state";
 
@@ -127,11 +128,12 @@ public class FlattenFlow extends AbsTransformer<MethodNode> {
     }
 
     @Override
-    public void transform(MethodNode methodNode) {
-
-        flattenControlFlow(methodNode);
-
+    public void transform(ClassNode classNode) {
+        if(Utils.matchRegexes(ConfigParser.Instance.getFlowExcludeClasses(), classNode.name))return;
+        for(MethodNode mn: classNode.methods)
+            flattenControlFlow(mn);
     }
+
     public static <T> T getRandomElement(List<T> list) {
         if (list == null || list.isEmpty()) {
             throw new IllegalArgumentException("List cannot be null or empty");

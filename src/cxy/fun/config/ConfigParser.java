@@ -12,6 +12,7 @@ public class ConfigParser {
     private final List<String> keepClasses=new ArrayList<String>();
     private final List<String> keepMethods=new ArrayList<String>();
     private final List<String> keepFields=new ArrayList<String>();
+    private final List<String> flowExcludeClasses=new ArrayList<String>();
     private final List<String> dictionary=new ArrayList<>();
     private boolean enableBytesEncrypt=true;
     private boolean enableFlow=true;
@@ -28,6 +29,7 @@ public class ConfigParser {
                 }
                 if (line.startsWith("-keepclass")) {
                     keepClasses.add(line.split(" ")[1]);
+                    System.out.println("Keep class:" + line.split(" ")[1]);
                 }
                 if (line.startsWith("-keepmethod")) {
                     keepMethods.add(line.split(" ")[1]);
@@ -39,7 +41,10 @@ public class ConfigParser {
                     enableBytesEncrypt= Boolean.parseBoolean(line.split(" ")[1]);
                 }
                 if (line.startsWith("-flow")) {
-                    enableFlow= Boolean.parseBoolean(line.split(" ")[1]);
+                    if(line.split(" ")[1].equals("exclude")){
+                        flowExcludeClasses.add(line.split(" ")[2]);
+                    }
+                    else enableFlow= Boolean.parseBoolean(line.split(" ")[1]);
                 }
                 if (line.startsWith("-newpackage")) {
                     newPackage= line.split(" ")[1];
@@ -54,7 +59,7 @@ public class ConfigParser {
                         if(i<1)continue;
                         dictionary.add(s);
                     }
-                }
+                }//exclude
             }
         }
     }
@@ -78,6 +83,10 @@ public class ConfigParser {
 
     public boolean isEnableFlow() {
         return enableFlow;
+    }
+
+    public List<String> getFlowExcludeClasses() {
+        return flowExcludeClasses;
     }
 
     public boolean isEnableBytesEncrypt() {

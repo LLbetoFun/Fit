@@ -31,6 +31,9 @@ public class Utils {
     public static boolean isMainClass(ClassNode classNode) {
         return classNode.name.equals(mainClass.replace('.', '/'));
     }
+    public static boolean isMainClass(String classNode) {
+        return classNode.equals(mainClass.replace('.', '/'));
+    }
     public static String getFieldDescriptor(Field field) {
         // 使用 ASM 的 Type 类获取字段描述符
         return Type.getDescriptor(field.getType());

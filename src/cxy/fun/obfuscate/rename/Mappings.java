@@ -26,9 +26,10 @@ public class Mappings {
     public static void readMapping(ClassNode classNode) throws ClassNotFoundException {
         readMapping(classNode.superName);
 
-        if(!isMainClass(classNode)){
+        if(!isMainClass(classNode)&&!Utils.matchRegexes(ConfigParser.Instance.getKeepClasses(),classNode.name)){
             for(MethodNode methodNode : classNode.methods) {
                 if(!methodNode.name.equals("<init>")&&!methodNode.name.equals("<clinit>")
+                        &&!(methodNode.name.equals("main")&&methodNode.desc.equals("([Ljava/lang/String;)V"))
                         &&!methodMap.containsKey(methodNode.name+" "+methodNode.desc)
                         &&!Utils.matchRegexes(ConfigParser.Instance.getKeepMethods(),methodNode.name))
                             methodMap.put(methodNode.name+" "+methodNode.desc, generateRandomString(3));
@@ -49,22 +50,29 @@ public class Mappings {
     }
     public static void readLibrary(String clzz) throws ClassNotFoundException {
         if (clzz==null)return;
-        Class<?> klz=Class.forName(clzz.replace('/','.'));
-        if(klz.getSuperclass() != null){
-            readLibrary(klz.getSuperclass().getName());
-        }
-        for(Class<?> itf:klz.getInterfaces()){
-            readLibrary(itf.getName());
-        }
-        for(Method method:klz.getDeclaredMethods()){
-            methodMap.put(method.getName()+" "+Utils.getMethodDescriptor(method),method.getName());
-            //System.out.println(method.getName()+" "+Utils.getMethodDescriptor(method));
+        try{
+            Class<?> klz=Class.forName(clzz.replace('/','.'));
+            if(klz.getSuperclass() != null){
+                readLibrary(klz.getSuperclass().getName());
+            }
+            for(Class<?> itf:klz.getInterfaces()){
+                readLibrary(itf.getName());
+            }
+            for(Method method:klz.getDeclaredMethods()){
+                methodMap.put(method.getName()+" "+Utils.getMethodDescriptor(method),method.getName());
+                //System.out.println(method.getName()+" "+Utils.getMethodDescriptor(method));
+            }
+
+            for(Field field:klz.getDeclaredFields()){
+                fieldMap.put(field.getName()+" "+Utils.getFieldDescriptor(field),field.getName());
+            }
+            classMap.put(clzz.replace('.','/'),klz.getName().replace('.','/'));
+        }catch (Exception e){
+            System.err.println(e.getMessage());
+            classMap.put(clzz.replace('.','/'),clzz.replace('.','/'));
+
         }
 
-        for(Field field:klz.getDeclaredFields()){
-            fieldMap.put(field.getName()+" "+Utils.getFieldDescriptor(field),field.getName());
-        }
-        classMap.put(clzz.replace('.','/'),klz.getName().replace('.','/'));
     }
     public static String generateRandomString(int length) {
         char[] characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz".toCharArray();

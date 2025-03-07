@@ -21,6 +21,7 @@ import static cxy.fun.obfuscate.asm.Utils.isMainClass;
 
 public class Obfuscutor {
     public static Map<String, ClassNode> classes = new HashMap<>();
+    public static Map<String, byte[]> classBytes = new HashMap<>();
 
 
     public static void obfuscate(String input, String output) throws Exception {
@@ -42,27 +43,33 @@ public class Obfuscutor {
             try (JarOutputStream tempJos = new JarOutputStream(Files.newOutputStream(tempJar.toPath()))) {
                 Enumeration<JarEntry> entries = jar.entries();
                 while (entries.hasMoreElements()) {
-                    JarEntry entry = entries.nextElement();
-                    InputStream is = jar.getInputStream(entry);
+                    try{
+                        JarEntry entry = entries.nextElement();
+                        InputStream is = jar.getInputStream(entry);
 
-                    // 处理 .class 文件
-                    if (entry.getName().endsWith(".class")) {
-                        byte[] b = ClassTraverser.traverser(Utils.getAllBytes(is));
-                        ClassNode cn = Utils.node(b);
-                        if (!isMainClass(b) && ConfigParser.Instance.isEnableBytesEncrypt()
-                                && Utils.matchRegexes(ConfigParser.Instance.getClasses(), cn.name)
-                                && !Utils.matchRegexes(ConfigParser.Instance.getKeepClasses(), cn.name)) {
-                            b = ByteCodeEncryption.encrypt(b);
+                        // 处理 .class 文件
+                        if (entry.getName().endsWith(".class")&&!entry.getName().startsWith("module-info")) {
+                            String className = entry.getName().replace(".class", "");
+                            byte[] b = ClassTraverser.traverser(Utils.getAllBytes(is));
+                            ClassNode cn = Utils.node(b);
+                            if (!isMainClass(className) && ConfigParser.Instance.isEnableBytesEncrypt()
+                                    && Utils.matchRegexes(ConfigParser.Instance.getClasses(), className)
+                                    && !Utils.matchRegexes(ConfigParser.Instance.getKeepClasses(), className)) {
+                                b = ByteCodeEncryption.encrypt(b);
+                            }
+                            tempJos.putNextEntry(new ZipEntry(cn.name + ".class"));
+                            tempJos.write(b);
+                        } else {
+                            // 处理非 .class 文件
+                            tempJos.putNextEntry(entry);
+                            byte[] b = Utils.getAllBytes(is);
+                            tempJos.write(b);
                         }
-                        tempJos.putNextEntry(new ZipEntry(cn.name + ".class"));
-                        tempJos.write(b);
-                    } else {
-                        // 处理非 .class 文件
-                        tempJos.putNextEntry(entry);
-                        byte[] b = Utils.getAllBytes(is);
-                        tempJos.write(b);
+                        tempJos.closeEntry();
                     }
-                    tempJos.closeEntry();
+                    catch (Exception e) {
+                        e.printStackTrace();
+                    }
                 }
 
                 // 处理额外的类和文件
@@ -151,12 +158,15 @@ public class Obfuscutor {
                 if (!entry.isDirectory())
                     if (entry.getName().endsWith(".class")){
                         byte[] b=Utils.getAllBytes(zis);
-
+                        classBytes.put(entry.getName().replace("/", ".").substring(0, entry.getName().length() - 6),b);
                         classes.put(entry.getName().replace("/", ".").substring(0, entry.getName().length() - 6), Utils.node(b));
 
-                        Mappings.readMapping(b);
 
                     }
+        }
+        for(String cn: classBytes.keySet()) {
+            System.out.println("ReadMapping:"+cn);
+            Mappings.readMapping(classBytes.get(cn));
         }
     }
 

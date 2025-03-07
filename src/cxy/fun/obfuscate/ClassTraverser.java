@@ -15,10 +15,12 @@ import org.objectweb.asm.tree.MethodNode;
 public class ClassTraverser {
     public static byte[] traverser(byte[] input) {
         ClassNode cn = Utils.node(input);
-        System.out.println(cn.name);
-        if(Utils.matchRegexes(ConfigParser.Instance.getClasses(),cn.name)){
+
+        if(Utils.matchRegexes(ConfigParser.Instance.getClasses(),cn.name)||Utils.isMainClass(cn.name)){
+            System.out.println("Obfuscating:"+cn.name);
             Transformer.transform(cn);
             if(!Utils.matchRegexes(ConfigParser.Instance.getKeepClasses(),cn.name))traverserClassMembers(cn);
+            else System.out.println("kept class:"+cn.name);
             cn.sourceDebug=null;
             cn.sourceFile=null;
 
@@ -34,20 +36,23 @@ public class ClassTraverser {
         return input;
     }
     private static void traverserClassMembers(ClassNode cn) {
-        for(Object m:cn.methods){
-            MethodNode mn = (MethodNode)m;
-            if(!Utils.matchRegexes(ConfigParser.Instance.getKeepMethods(),mn.name))transformMethod(mn);
+        try{
+            for(Object m:cn.methods){
+                MethodNode mn = (MethodNode)m;
+                if(!Utils.matchRegexes(ConfigParser.Instance.getKeepMethods(),mn.name))transformMethod(mn);
+            }
+            for(Object m:cn.fields){
+                FieldNode fn = (FieldNode)m;
+                transformField(fn);
+            }
+        }catch (Exception e){
+            System.out.println("Err in Obfuscute"+" "+cn.name+" "+e.getMessage());
         }
-        for(Object m:cn.fields){
-            FieldNode fn = (FieldNode)m;
-            transformField(fn);
-        }
+
     }
     private static void transformMethod(MethodNode mn) {
         Transformer.transform(mn);
-        /*for(AbstractInsnNode ain:mn.instructions) {
-            Transformer.transform(ain);
-        }*/
+
     }
     private static void transformField(FieldNode fn) {
         Transformer.transform(fn);
